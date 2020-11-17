@@ -92,10 +92,6 @@
     />
     <Result :visible.sync="showResult"></Result>
 
-    <span class="copy-right">
-      Copyright©zhangyongfeng5350@gmail.com
-    </span>
-
     <audio
       id="audiobg"
       preload="auto"
@@ -415,13 +411,6 @@ export default {
       position: relative;
       left: 1px;
     }
-  }
-  .copy-right {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    color: #ccc;
-    font-size: 12px;
   }
   .bounce-enter-active {
     animation: bounce-in 1.5s;

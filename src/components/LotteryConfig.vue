@@ -23,7 +23,7 @@
         <el-form-item label="抽奖标题">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="抽奖总人数">
+        <el-form-item label="奖品总数">
           <el-input
             type="number"
             v-model="form.number"

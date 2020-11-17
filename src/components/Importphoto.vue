@@ -8,14 +8,7 @@
   >
     <el-row>
       <label for="idinput">抽奖号码</label>
-      <el-input
-        id="idinput"
-        size="mini"
-        type="number"
-        v-model="id"
-        :min="0"
-        :max="config.number"
-      ></el-input>
+      <el-input id="idinput" v-model="id" placeholder="可以逗号分隔"></el-input>
     </el-row>
     <el-row>
       <label for="idinput">照片选择</label>
@@ -53,20 +46,20 @@ import { database, DB_STORE_NAME } from '@/helper/db';
 export default {
   name: 'Importphoto',
   props: {
-    visible: Boolean
+    visible: Boolean,
   },
   computed: {
     config: {
       get() {
         return this.$store.state.config;
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      id: 0,
+      id: '0',
       value: '',
-      filename: '点击选择照片'
+      filename: '点击选择照片',
     };
   },
   methods: {
@@ -94,43 +87,46 @@ export default {
     },
     async saveHandler() {
       const { id, value } = this;
-      const ID = Number(id);
-      if (!ID || ID <= 0) {
-        return this.$message.error('号码必须大于0的整数');
+      const ids = id.split(',');
+      for (let index = 0; index < ids.length; index++) {
+        const ID = Number(ids[index]);
+        if (!ID || ID <= 0) {
+          return this.$message.error('号码必须大于0的整数');
+        }
+        if (!value) {
+          return this.$message.error('请选择照片');
+        }
+        const Data = await database.get(DB_STORE_NAME, ID);
+        const param = {
+          id: ID,
+          value,
+        };
+        database[Data ? 'edit' : 'add'](
+          DB_STORE_NAME,
+          Data ? ID : param,
+          Data ? param : null
+        )
+          .then((res) => {
+            if (res) {
+              this.$refs.uploadinput.value = '';
+              this.value = '';
+              this.filename = '点击选择照片';
+              this.$emit('update:visible', false);
+              this.$emit('getPhoto');
+              this.$message({
+                message: '保存成功',
+                type: 'success',
+              });
+            } else {
+              this.$message.error('保存失败');
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err.message);
+          });
       }
-      if (!value) {
-        return this.$message.error('请选择照片');
-      }
-      const Data = await database.get(DB_STORE_NAME, ID);
-      const param = {
-        id: ID,
-        value
-      };
-      database[Data ? 'edit' : 'add'](
-        DB_STORE_NAME,
-        Data ? ID : param,
-        Data ? param : null
-      )
-        .then(res => {
-          if (res) {
-            this.$refs.uploadinput.value = '';
-            this.value = '';
-            this.filename = '点击选择照片';
-            this.$emit('update:visible', false);
-            this.$emit('getPhoto');
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            });
-          } else {
-            this.$message.error('保存失败');
-          }
-        })
-        .catch(err => {
-          this.$message.error(err.message);
-        });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">
