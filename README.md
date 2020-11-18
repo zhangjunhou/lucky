@@ -43,7 +43,3 @@
 - 名单和照片显示只需导入一种即可,无导入数据则使用抽奖号码。
 - 建议使用最新的 Chrome 浏览器打开体验最佳。
 - 由于背景音乐加载较慢，可以在抽奖前提前打开缓存好。或者安装 windows 版本软件到本地，无需联网即可使用。
-
-## windows 软件版本
-
-- 本抽奖程序的 windows 软件版本下载[安装包](https://github.com/vitozyf/lucky-draw/releases)
